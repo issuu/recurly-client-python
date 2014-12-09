@@ -41,6 +41,10 @@ SOCKET_TIMEOUT_SECONDS = None
 """The number of seconds after which to timeout requests to the Recurly API.
 If unspecified, the global default timeout is used."""
 
+STRIP_TZINFO = False
+"""Strip time zone information from datetimes returned by the API"""
+
+
 def base_uri():
     if SUBDOMAIN is None:
         raise ValueError('recurly.SUBDOMAIN not set')

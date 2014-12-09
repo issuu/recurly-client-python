@@ -417,7 +417,10 @@ class Resource(object):
         if attr_type == 'boolean':
             return elem.text.strip() == 'true'
         if attr_type == 'datetime':
-            return iso8601.parse_date(elem.text.strip())
+            dt = iso8601.parse_date(elem.text.strip())
+            if recurly.STRIP_TZINFO:
+                dt.replace(tzinfo=None)
+            return dt
         if attr_type == 'array':
             return [cls._subclass_for_nodename(sub_elem.tag).from_element(sub_elem) for sub_elem in elem]
 
