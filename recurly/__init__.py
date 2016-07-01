@@ -542,6 +542,17 @@ class Subscription(Resource):
             url = urljoin(recurly.base_uri(), self.collection_path) + '/preview'
             return self.post(url)
 
+    def postpone(self, next_renewal_date, bulk=False):
+        url = self._url + '/postpone?next_renewal_date=' + next_renewal_date + '&bulk=' + str(bulk).lower()
+        # brutally copied from resource.py::Resource.put
+        response = Subscription.http_request(url=url, method='PUT')
+        if response.status != 200:
+            self.raise_http_error(response)
+
+        response_xml = response.read()
+        logging.getLogger('recurly.http.response').debug(response_xml)
+        self.update_from_element(ElementTree.fromstring(response_xml))
+
     def _update(self):
         if not hasattr(self, 'timeframe'):
             self.timeframe = 'now'
