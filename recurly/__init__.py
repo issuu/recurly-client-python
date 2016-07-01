@@ -543,7 +543,7 @@ class Subscription(Resource):
             return self.post(url)
 
     def postpone(self, next_renewal_date, bulk=False):
-        url = self._url + '/postpone?next_renewal_date=' + next_renewal_date + '&bulk=' + str(bulk).lower()
+        url = self._url + '/postpone?next_renewal_date=' + next_renewal_date.strftime('%Y-%m-%d') + '&bulk=' + str(bulk).lower()
         # brutally copied from resource.py::Resource.put
         response = Subscription.http_request(url=url, method='PUT')
         if response.status != 200:
